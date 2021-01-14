@@ -1,4 +1,4 @@
-# ROS_Programming
+# ROS Robotics Programming
 *Basic and Tutorials of ROS Programming*
 
 * 경북대학교 ROS 로보틱스 프로그래밍 수업을 기반으로 강의시간에 학습한 내용을 정리한 문서입니다.
@@ -188,3 +188,137 @@ ROS의 버전에는 1.x 버전과 2.x 버전이 있다. 시장에서는 현재 �
 
 
 
+## [21.01.07]
+
+### 1. 리눅스 SAMBA (파일 공유 시스템)
+
+*  설치 : ```$ sudo apt-get install samba samba-common-bin```
+*  비밀번호 설정 : ```$ sudo smbpasswd –a ubuntu ```  (ubuntu : 계정 이름)
+
+![image](https://user-images.githubusercontent.com/45297745/104580702-eca62680-56a0-11eb-99e2-3b5be93fdd7d.png)
+
+* 공유 디렉토리 생성 : ```$ sudo vi /etc/samba/smb.conf ```
+  해당 파일에 다음과 같이 작성(Setting)
+
+![image](https://user-images.githubusercontent.com/45297745/104580733-faf44280-56a0-11eb-8494-e0c840bb0f04.png)
+
+* 재시작 : ```$ service smbd restart```
+* 아이피 주소 확인 후 윈도우에서 접속 : ```$ iwconfig``` 후 Win+R
+
+![image](https://user-images.githubusercontent.com/45297745/104580769-07789b00-56a1-11eb-9fb9-17456700502f.png)
+
+* 해당 서버로 접속 (설정 기억 체크)
+
+![image](https://user-images.githubusercontent.com/45297745/104580826-18291100-56a1-11eb-96bb-b3e10b608ab0.png)
+
+### 2. 패키지 생성(79pg.) 및 패키지 설정 파일 수정(81pg.)
+
+* ~/catkin_ws/src 디렉토리로 이동 : ```$ cs```   (설정한 단축어임.)
+*  my_test_pkg 패키지 생성 : ```$ catkin_create_pkg my_test_pkg std_msgs roscpp```
+* 패키지 설정 파일 수정 (81pg.) : ```$ vi package.xml```     (안건드림..)
+  (http://wiki.ros.org/catkin/package.xml)
+  (※ 책은 Format1, 실습에서는 Format2 (최근 버전)를 사용함.)        
+
+### 3. 빌드 설정 파일 수정 (83pg.)
+
+* CMakeLists.txt 수정 (83pg.) : ```$ vi CMakeLists.txt  ```
+  * 실행 파일 생성, 의존성 패키지 우선 빌드, 링크 생성 등
+  * 어떤 메시지를 사용할 지 선언 해줘야 함(주석처리만 지우면 됨)
+  * 오타 주의!
+  * http://wiki.ros.org/catkin/CMakeLists.txt
+
+### 4. 소스코드 작성 (93pg.)
+
+* ros 클래스 구성 및 사용법 : https://docs.ros.org/en/api/roscpp/html/ 
+* ~/catkin_ws/src/my_test_pkg/src 에 hello_world_node.cpp 생성 후 다음과 같이 작성
+
+```c++
+#include <ros/ros.h>
+#include <std_msgs/String.h>  // 메시지 파일 선언
+#include <sstream>
+
+int main(int argc, char** argv)
+{
+    ros::init(argc, argv, "hello_world_node");
+    ros::NodeHandle nh;
+    ros::Publisher chatter_pub = nh.advertise<std_msgs::String>("say_hello_world", 1000);
+    ros::Rate loop_rate(10);
+    int count = 0;
+    
+    while (ros::ok())
+    {
+        std_msgs::String msg;
+        std::stringstream ss;
+        
+        ss << "hello world!" << count;
+        msg.data = ss.str();
+        ROS_INFO("%s", msg.data.c_str());
+        chatter_pub.publish(msg);
+        
+        ros::spinOnce();
+        loop_rate.sleep();
+        ++count;
+    }
+    return 0;
+}
+```
+
+
+
+### 5. 패키지 빌드 (94pg.)
+
+* ROS 패키지 프로파일 갱신 : $ rospack profile
+* 캐킨 빌드 : $ cd ~/catkin_ws && catkin_make
+
+### 6. 노드 실행 (95pg.)
+
+* 빌드가 정상적으로 수행 되면 ‘~/catkin_ws/devel/lib/my_test_pkg’ 에 ‘hello_world_node’ 실행 파일이 생성됨.
+* 노드 구동 : ```$ roscore ```
+* 노드 실행(새로운 터미널 창 Ctrl + Alt + t) : ```$ rosrun my_test_pkg hello_world_node```
+
+#### <roscore 실행 시>
+
+![image](https://user-images.githubusercontent.com/45297745/104586222-8ae9ba80-56a8-11eb-9a36-b5ee01712ef2.png)
+
+#### <node 실행 시> (새로운 터미널)
+
+![image](https://user-images.githubusercontent.com/45297745/104586241-9210c880-56a8-11eb-9c02-55edc708f387.png)
+
+현재는 Publisher는 있지만 Subscriber가 없기 때문에 그냥 콘솔에 뿌리고 있기만 함.
+
+
+
+## [21.01.14]
+
+### 1.  Robot Package
+
+### 2. ROS Serial (267pg)
+
+ROS O/S가 설치된 Main 보드와 ROS가 설치되지 않은 MCU간의 통신을 위해 사용되는 라이브러리. https://wiki.ros.org/rosserial 참고.
+
+#### 1) rosserial server
+
+#### 2) rosserial client
+
+MCU (Micro Controller Unit)
+
+특정 역할 수행만을 담당하는 보드
+
+* 8-bit : AVR (ATmel사)
+* 32-bit : ARM
+
+#### 3) rosserial 프로토콜
+
+#### 4) rosserial 제약사항
+
+
+
+### 3. Arduino 설치 및 연결
+
+#### 1) 설치
+
+#### 2) 설정
+
+* ```$ ls -l /dev/ttyUSB*``` : Arduino가 연결된 포트 및 권한 확인
+
+* ``` $ sudo chmod a+rw /dev/ttyUSB0```  : 포트 읽기, 쓰기 권한 설정

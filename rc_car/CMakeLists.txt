@@ -131,6 +131,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/rc_car_node.cpp)
 add_executable(motor_pub src/motor_pub.cpp)
+add_executable(key_publisher src/key_publisher.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -142,6 +143,7 @@ add_executable(motor_pub src/motor_pub.cpp)
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(motor_pub ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(key_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
@@ -151,7 +153,9 @@ add_dependencies(motor_pub ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED
 target_link_libraries(motor_pub
     ${catkin_LIBRARIES}
 )
-
+target_link_libraries(key_publisher
+    ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##

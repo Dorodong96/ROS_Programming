@@ -5,7 +5,7 @@
 // DESCRIPTION  : 명령에 따른 모터 제어(Forward, BackWard, Stop)
 
 #include "ros/ros.h"
-#include "std_msgs/String.h"
+#include "std_msgs/String.h" // std_msgs/String.h 사용(생성하지 않음)
 
 #define FORWARD	"forward"
 #define BACKWARD	"backward"
@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     // 퍼블리셔 선언
     ros::Publisher motor_pub = nh.advertise<std_msgs::String>("/motor_msg", 100);
 	
-    // 루프주기 설정 (1초 간격)
+    // 루프주기 설정 (1초 간격 ; 1Hz)
     ros::Rate loop_rate(1);
     std_msgs::String msg;
 
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     while (ros::ok()) {
     	   if(count % 2 == 0)	msg.data = FORWARD;
 	   else if(count % 3 == 0) 	msg.data = BACKWARD;
-	   else if(count % 5 == 0)	msg.data = STOP;
+	   else if((count % 5 == 0) || count == 0)	msg.data = STOP;
 
 	   motor_pub.publish(msg);
 	   loop_rate.sleep();

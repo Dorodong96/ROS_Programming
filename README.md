@@ -284,7 +284,133 @@ int main(int argc, char** argv)
 
 ![image](https://user-images.githubusercontent.com/45297745/104586241-9210c880-56a8-11eb-9c02-55edc708f387.png)
 
-현재는 Publisher는 있지만 Subscriber가 없기 때문에 그냥 콘솔에 뿌리고 있기만 함.
+(※ 현재는 Publisher는 있지만 Subscriber가 없기 때문에 그냥 콘솔에 뿌리고 있기만 함.)
+
+## [21.01.08]
+
+### 1. 파일 확인하기
+
+* 로그 파일 확인(저장 위치) : $ cd ~/.ros/log/
+* 실행 파일 위치 : 내가 만든 파일 -> $ ~/catkin_ws/devel/lib/
+  다운받은 파일(turtlesim) -> $ /opt/ros/kinetic/lib/
+* 소스 코드 : 내가 만든 파일 -> $ ~/catkin_ws/src/
+  다운받은 파일(turtlesim) -> $ /opt/ros/kinetic/share/
+
+### 2. turtlesim
+* Package Summary : http://wiki.ros.org/turtlesim 
+* Source code : https://github.com/ros/ros_tutorials/tree/noetic-devel/turtlesim 
+
+### 3. ROS 실행 명령어 ★ 
+
+####  1) roscore : roscore 실행 (102pg.)
+
+* 기본 실행 : $ roscore
+* 옵션으로 실행 : $ roscore [옵션]
+
+#### 2) rosrun : ROS 노드 실행 (103pg.)
+
+* $ rosrun [패키지 이름] [노드 이름]
+* 실행 예시 : $ rosrun turtlesim turtlesim_node
+
+####  3) roslauch : ROS 노드 여럿 실행 (104pg.)
+* launch 파일 실행 : $ roslaunch [패키지 이름] [launch 파일 이름]
+* launch 파일 실행 예시 : $ roslaunch openni_launch openni.launch
+* 노드 종료 : $ rosnode cleanup
+
+####  4) rosclean : ROS 로그 검사 및 삭제 (105pg.)
+* $ rosclean [옵션]     (옵션 모르겠으면 $ rosclean –help)
+  (검사 : $ rosclean check  // 삭제 : $ rosclean purge)
+
+### 4. ROS 정보 명령어 ★★
+
+※ roscore 실행 필요, rostopic, rosservice, rosnode, rosparam 자주 사용, --help 사용하기
+
+#### 1) rostopic : ROS 토픽 정보 확인 
+
+(※ topic : 노드와 노드 사이 지속적으로 교환되는 메시지)
+보내는 토픽 메시지의 내용, 타입 등을 확인하기 위해 사용. (110pg.)
+토픽 이름과 타입은 소스코드에서 정의하고 있음. (토픽 타입, 토픽 이름)
+(ros::Publisher chatter_pub = nh.advertise<std_msgs::String>(“say_hello_world”, 1000);
+
+* 활성화된 토픽 목록 표시 : $ rostopic list 
+* 지정한 토픽의 메시지 내용 실시간 표시 : $ rostopic echo [토픽 이름] 
+  (ex : $ rostopic echo /turtle1/pose)
+* 지정한 타입의 메시지 사용하는 토픽 표시 : $ rostopic find [타입 이름]
+  (ex : $ rostopic find turtlesim/Pose)
+* 지정한 토픽의 메시지 타입 표시 : $ rostopic type [토픽 이름]
+  (ex : $ rostopic type /turtle1/pose)
+* 지정한 토픽의 정보 표시 : $ rostopic info [토픽 이름]
+  (ex : $ rostopic info /turtle1/pose)
+
+####  2) rosservice : ROS 서비스 정보 확인 (113pg.)
+
+* 활성화된 서비스 정보 출력 : $ rosservice list
+* 지정한 서비스의 정보 표시 : $ rosservice info [서비스 이름]
+  (ex : $ rossrevice info /turtle1/set_pen)
+* 서비스 타입 출력 : $ rosservice type [서비스 이름]
+  (ex : $ rosservice type /turtle1/set_pen)
+* 지정한 타입의 서비스 검색 : $ rosservice find [서비스 타입]
+  (ex : $ rostservice find turtlesim/SetPen)
+
+※	rossrv 명령어와 구분필요! 
+rosservice : 현재 활성화된 서비스  // rossrv : 설치된 모든 서비스
+
+####  3) rosnode : ROS 노드 정보 확인 (106pg.)
+
+* 활성화된 노드 목록 확인 : $ rosnode list
+  (※ 실행 노드 이름과 실제 노드의 이름이 다른 경우에는 사용하는 노드 이름과 출력되는 노드 이름이 다르다. 이는 소스 코드를 통해 구현되므로, 실행 노드 이름과 실제 노드 이름을 동일하게 설정하는 것이 좋다.)
+* 지정된 노드와 연결 테스트 : $ rosnode ping [노드 이름]
+  (ex : $ rosnode ping /turtlesim)
+* 지정된 노드 정보 확인 : $ rosnode info [노드 이름]
+  (ex : $ rosnode info /turtlesim)
+* 해당 PC에서 실행되고 있는 노드 목록 확인 : $ rosnode machine [PC이름 또는 IP]
+  (ex : $ rosnode machine 192.168.1.100)
+* 지정된 노드 실행 중단 : $ rosnode kill [노드 이름]
+  (ex : $ rosnode kill /turtlesim)  (ex2 : 모든 노드 종료 $ rosnode kill –a)
+* 연결 정보가 확인 안되는 유령 노드의 등록 정보 삭제 : $ rosnode cleanup
+
+####  4) rosparam : ROS 파라미터 정보 확인, 수정 (117pg.)
+
+#### 5) rosbag : ROS 메시지 기록, 재생 (124pg.)
+
+#### 6) rosmsg : ROS 메시지 정보 확인 (120pg.)
+
+[4~6은 책, 자료 및 help 참고]
+
+#### 7) rossrv : ROS 서비스 정보 확인 (122pg.)
+
+* 모든 서비스 목록 표시 : $ rossrv list
+* 지정한 서비스 정보 표시 : $ rossrv show [서비스 이름]
+  (ex : $ rossrv show turtlesim/SetPen)
+
+### 5. ROS catkin 명령어 ★★
+
+####  1) catkin_create_pkg : 패키지를 자동으로 생성 (128pg.)
+
+* $ catkin_create_pkg [패키지 이름] [의존성 패키지1] [의존성 패키지2]…
+* ex : $ catkin_create_pkg my_package roscpp std_msgs
+  (※ ‘std_msgs’를 ‘std_msg’로 쓰지 않도록 주의!)
+
+####  2) catkin_make : 캐킨 빌드 시스템에 기반을 둔 빌드 (129pg.)
+
+* $ catkin_make [옵션]
+* 모든 패키지 빌드 : (해당 디렉토리에서) $ catkin_make 
+* 일부 패키지 빌드 : $ catkin_make --pkg [패키지 이름]
+
+### 6. ROS 패키지 명령어 ★★
+
+####  1) rospack : 지정한 ROS 패키지의 관련 정보를 표시 (131pg.)
+
+* 해당 패키지의 저장 위치 표시 : $ rospack find [패키지 이름]
+* PC에 있는 모든 패키지 표시 : $ rospack list
+* grep명령어와 조합(turtle관련 패키지 찾기) : $ rospack list | grep turtle
+* 지정한 패키지를 이용하는 패키지의 목록 : $ rospack depends-on [패키지 이름]
+* 지정한 패키지의 실행에 필요한 의존성 패키지의 목록 : $ rospack depends [패키지 이름]
+* 패키지 저장된 작업 폴더 및 패키지 정보 확인, 패키지 인덱스 재구축 : $ rospack profile
+
+####  2) rosinstall : ROS 추가 패키지 설치 (133pg.)
+
+#### 3) rosdep : 해당 패키지의 의존성 파일 설치 (134pg.)
 
 
 

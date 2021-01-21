@@ -5,7 +5,7 @@
 
 * 교재는 **『ROS 로봇 프로그래밍』( 표윤석 외 / 루비페이퍼) **를 사용하였으며 본 문서에 주제별로 참고된 해당 페이지가 적혀있습니다.
 
-* ROS와 관련된 모든 최신의 상세한 내용들은 https://wiki.ros.org/ 에 있습니다. 해당 페이지를 수시로 확인해보는 습관을 가집시다!
+* ROS와 관련된 최신의 모든 상세한 내용들은 https://wiki.ros.org/ 에 있습니다. 해당 페이지를 수시로 확인해보는 습관을 가집시다.
 
 ## [21.01.05]
 
@@ -414,13 +414,112 @@ rosservice : 현재 활성화된 서비스  // rossrv : 설치된 모든 서비�
 
 
 
+## [21.01.11]
+
+### 1. TOPIC 프로그래밍 (160pg.)
+
+#### TOPIC 프로그래밍 단계
+
+> (1) Package 생성
+>
+> (2) Package 설정 파일 수정
+>
+> (3) Build 설정 파일 수정
+>
+> (4) 메시지 파일 작성 (msg디렉토리 생성 -> .msg파일 생성)
+>
+> (5) Publisher Node 작성
+>
+> (6) Subscriber Node 작성
+>
+> (7) ROS 빌드
+>
+> (8) Publisher 실행
+>
+> (9) Subscriber 실행
+>
+> (10) 통신 상태 확인
+
+### 2. SERVICE 프로그래밍 (171pg.)
+
+#### SERVICE 프로그래밍 단계
+
+> (1) Package 생성
+>
+> (2) Package 설정 파일 수정
+>
+> (3) Build 설정 파일 수정  
+>
+> (4) 메시지 파일 작성 (srv디렉토리 생성 -> .srv파일 생성)
+>
+> (5) Publisher Node 작성
+>
+> (6) Subscriber Node 작성
+>
+> (7) ROS 빌드
+>
+> **빌드 후 패키지 디렉토리 존재해야함!**
+>
+> (catkin_ws/devel/lib/패키지명/실행파일)
+> (catkin_ws/devel/include/패키지명/헤더파일(*.h)
+>
+> (8) Service Server 실행
+>
+> (9) Service Client 실행
+>
+> (10) 통신 상태 확인
+
+![image](https://user-images.githubusercontent.com/45297745/105329979-1d440e00-5c15-11eb-8080-213f7babd27e.png)
+
+
+
+## [21.01.12]
+
+### 1. Parameter를 활용한 SERVICE 프로그래밍 (193pg.)
+
+### 2. roslaunch 명령어
+
+* 하나 이상의 정해진 노드 실행
+
+* 패키지 매개변수 변경, 노드 이름 변경, 네임스페이스 설정
+
+* ROS_ROOT 및 ROS_PACKAGE_PATH 설정
+
+* 환경변수 변경
+
+* *.launch 파일로 실행 Node 설정
+
+* XML 기반, 태그별 옵션 제공 
+
+* ex1)``` <open_tag>”value”</close_tag>  ```
+
+* ex2)``` <open_tag key1=”value1” key2=”value2” … />```
+
+* 실제 사용 예시
+
+  ```
+  <launch>
+  <node pkg="ros_tutorials" type="topic_publisher" name="topic_publisher"/>
+  </launch>
+  ```
+
+### Tip.
+
+> * Topic, Service, Action이 각각 어떤 그림의 형태를 가지는지 이해할 것.
+> * 나중에 노드 관계를 설계할 때 해당 과정이 머릿속에 있어야 함!
+> * https://wiki.ros.org/ 항상 확인하기 (버전 주의)
+
+
+
 ## [21.01.14]
 
 ### 1.  Robot Package
 
 ### 2. ROS Serial (267pg)
 
-ROS O/S가 설치된 Main 보드와 ROS가 설치되지 않은 MCU간의 통신을 위해 사용되는 라이브러리. https://wiki.ros.org/rosserial 참고.
+ROS O/S가 설치된 Main 보드와 ROS가 설치되지 않은 MCU간의 통신을 위해 사용되는 라이브러리.
+
+> https://wiki.ros.org/rosserial 참고.
 
 #### 1) rosserial server
 

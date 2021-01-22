@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="rc_car" type="motor_pub" name="motor_pub"/>
+	<node pkg="rc_car" type="ultrasound_sub" name="ulstrasound_sub"/>
+</launch>

@@ -10,6 +10,10 @@
 #define FORWARD	"forward"
 #define BACKWARD	"backward"
 #define STOP		"stop"
+#define RIGHT		"right"
+#define LEFT		"left"
+
+#define U_PARAMETER	"distance"
 
 int main(int argc, char **argv)
 {
@@ -20,20 +24,27 @@ int main(int argc, char **argv)
     ros::Publisher motor_pub = nh.advertise<std_msgs::String>("/motor_msg", 100);
 	
     // 루프주기 설정 (1초 간격 ; 1Hz)
-    ros::Rate loop_rate(1);
+    ros::Rate loop_rate(2);
     std_msgs::String msg;
 
-    int count = 10;
+    int distance = 0;
 
     while (ros::ok()) {
-    	   if(count % 2 == 0)	msg.data = FORWARD;
-	   else if(count % 3 == 0) 	msg.data = BACKWARD;
-	   else if((count % 5 == 0) || count == 0)	msg.data = STOP;
+	   nh.getParam(U_PARAMETER, distance);
+
+    	   if (distance <= 50){
+		  ROS_INFO(BACKWARD);
+		  msg.data = BACKWARD;
+	   }else if(distance <= 100){
+		  ROS_INFO(FORWARD);
+		  msg.data = FORWARD;
+	   }else if(distance > 100){
+		  ROS_INFO(STOP);
+		  msg.data = STOP;
+	   }
 
 	   motor_pub.publish(msg);
 	   loop_rate.sleep();
-
-	   count--;
     }
 
 	return 0;
